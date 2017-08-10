@@ -1,13 +1,13 @@
 <!doctype html>
-<html>
+<html lang="zh-cn">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>用 PostgreSQL 进行数据建模</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/serif.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -24,8 +24,83 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>这里是标题</section>
+
+				<section>申明：「不破只立」</section>
+
+				<section>
+					<section>为什么用 SQL 数据库进行数据建模</section>
+				</section>
+
+				<section>
+					<section>提要</section>
+					<section>「规范化」</section>
+					<section>foreign key 和关系建模</section>
+					<section>合理利用 view 提高建模效率</section>
+					<section>primary key, unique key, serial, and index</section>
+					<section>PostgreSQL specific tricks</section>
+					<section>运维工具</section>
+					<section>实战：modeling a workflow API</section>
+					<section>其他相关</section>
+				</section>
+
+				<section>
+					<section>「规范化」</section>
+					<section>范式的递进</section>
+				</section>
+
+				<section>
+					<section>1NF</section>
+				</section>
+
+				<section>
+					<section>3NF</section>
+				</section>
+
+				<section>
+					<section>BCNF</section>
+				</section>
+
+				<section>
+					<section>foreign key 和关系建模</section>
+					<section>一对一关系</section>
+					<section>一对多关系</section>
+					<section>多对多关系</section>
+					<section>CTE 和递归查询</section>
+				</section>
+
+				<section>合理利用 view 提高建模效率</section>
+
+				<section>
+					<section>primary key, unique key, serial, and index</section>
+					<section>
+						Instagram's sharding and ID generation:
+						https://engineering.instagram.com/sharding-ids-at-instagram-1cf5a71e5a5c
+					</section>
+				</section>
+
+				<section>
+					<section>PostgreSQL specific tricks</section>
+					<section>range type</section>
+					<section>tsrange</section>
+					<section>point, box and circle</section>
+				</section>
+
+				<section>运维工具</section>
+
+				<section>
+					实战：modeling a workflow API
+				</section>
+
+				<section>
+					<section>
+						其他相关
+					</section>
+					<section>
+						cockroachdb and tidb
+					</section>
+				</section>
+
 			</div>
 		</div>
 
