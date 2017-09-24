@@ -70,7 +70,7 @@ create view movie_fans as select
 
 *和 create view 一样，只是多了一个 materialized，works like a cache*
 
-- 数据会真正 copy，不再需要 hit the real tables
+- 数据会真正 copy，不再需要 hit the real tables，但也不再实时刷新
 - 可以在其上面建立 index
 - 支持 refresh 功能
 - 这里讨论的是数据建模，性能优化就不详细讲了
