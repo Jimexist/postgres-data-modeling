@@ -35,3 +35,13 @@
 - inet / CIDR
 - enum （慎用）
 - 甚至 customized type（慎用）
+
+
+### 其他有用的建模工具
+
+- [inheritance](https://www.postgresql.org/docs/current/static/ddl-inherit.html) / [partition](https://www.postgresql.org/docs/current/static/ddl-partitioning.html)
+- Postgres 10 中有了 [native partition](https://wiki.postgresql.org/wiki/New_in_postgres_10#Native_Partitioning)
+- [window function](https://www.postgresql.org/docs/9.6/static/functions-window.html)
+- [cubing](https://www.postgresql.org/docs/9.6/static/cube.html)
+- [全文搜索](https://www.postgresql.org/docs/9.6/static/textsearch.html)
+- [确定精度计算](https://www.postgresql.org/docs/9.6/static/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL) 和 `money` 类型
