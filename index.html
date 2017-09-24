@@ -24,7 +24,6 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-
 				<section>
 					<section>
 						<h1>使用 Postgres 进行数据建模</h1>
@@ -35,358 +34,36 @@
 						<p>相关公式、概念的严格定义请参阅官方文档和专业书籍。
 					</section>
 				</section>
-
-				<section>
-					<section>
-						<h2>数据建模的重要性</h2>
-					</section>
-
-					<section>
-						<h3>数据模型是一个应用最「核心」的部分</h3>
-						<ol>
-							<li>数据模型是业务逻辑的最直接、纯粹的体现</li>
-							<li>数据模型应比应用代码长寿，更少变动，变动成本更高</li>
-							<li>好的应用<a href="https://12factor.net/processes" target="_blank">应是无状态的</a>，数据库承担了持久化的责任</li>
-							<li>程序崩溃了可以重启；数据丢失或者错误，后果更严重</li>
-						</ol>
-					</section>
-
-					<section>
-						<h3>数据建模的目标</h3>
-						<p>我觉得好的数据模型和建模工具应该追求一下目标（重要性降序排列）：</p>
-						<ol>
-							<li>准确：数据不能丢、不能重复、不能不一致</li>
-							<li>灵活：用最少的时间，完成更多不同的事情</li>
-							<li>高效：运行效率高，可以处理的数据量大</li>
-						</ol>
-					</section>
+				<section data-markdown="markdowns/数据建模的重要性.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>
-					<section>
-						<h2>为什么用关系型数据库进行数据建模</h2>
-					</section>
-
-					<section>
-						<h3>对比目标就可以发现</h3>
-						<ol>
-							<li>准确：schema, typed, 关系代数……</li>
-							<li>灵活：SQL is powerfully flexible</li>
-							<li>高效：dynamically optimized by default</li>
-						</ol>
-						<p>
-							<em>之后可以一一看到例子</em>
-						</p>
-					</section>
-
-					<section>
-						<h3>站在巨人的肩膀上</h3>
-						<p>关系型数据库和背后的数据建模语言、关系代数比在座的绝大多数人都出现的早</p>
-						<p>数十年的研究、开发、测试、调试、优化 v.s. 你自己写的代码逻辑</p>
-						<p>很多人只是浅尝辄止，随便写写 select 和用用 ORM 的状态</p>
-						<p>But SQL is far more that that——你所需要的只是多了解一下 SQL 的强大功能</p>
-						<p>「懒惰」是程序员的美德</p>
-					</section>
+				<section data-markdown="markdowns/为什么用关系型数据库进行数据建模.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>
-					<section>
-						<h2>提要</h2>
-					</section>
-					<section>
-						Normalization
-					</section>
-					<section>
-						foreign key 和关系建模
-					</section>
-					<section>
-						合理利用 view 提高建模效率
-					</section>
-					<section>
-						primary key, unique key, serial, and index
-					</section>
-					<section>
-						PostgreSQL specific tricks
-					</section>
-					<section>
-						实用工具
-					</section>
-					<section>
-						实战：modeling a workflow API
-					</section>
-					<section>
-						其他
-					</section>
+				<section data-markdown="markdowns/提要.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>
-					<section>
-						<h2>Normalization</h2>
-					</section>
-
-					<section>
-						<h3>范式的递进</h3>
-						<p>规范了如何把实体和关系对应成 tables 和 keys</p>
-						<p>建模目标：准确 ✅</p>
-						<p>分为不同等级，层层递进，前者是后者的前提<p>
-						<ul>
-							<li>1NF</li>
-							<li>3NF</li>
-							<li><em>BCNF</em></li>
-							<li>4NF</li>
-							<li>etc.</li>
-						</ul>
-					</section>
-
-					<section>
-						<h3>1NF</h3>
-						<p>所有的 column 都只存简单不可分的值</p>
-					</section>
-
-					<section>
-						<p>从复合字段</p>
-						<table>
-							<caption>Customer</caption>
-							<tbody><tr>
-							<th>Customer ID</th>
-							<th>Name</th>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>Pooja Singh</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>San Zhang</td>
-							</tr>
-							<tr>
-							<td>789</td>
-							<td>John Doe</td>
-							</tr>
-							</tbody>
-						</table>
-						<p>变成简单字段</p>
-						<table>
-							<caption>Customer</caption>
-							<tbody><tr>
-							<th>Customer ID</th>
-							<th>First Name</th>
-							<th>Surname</th>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>Pooja</td>
-							<td>Singh</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>San</td>
-							<td>Zhang</td>
-							</tr>
-							<tr>
-							<td>789</td>
-							<td>John</td>
-							<td>Doe</td>
-							</tr>
-							</tbody>
-						</table>
-					</section>
-
-					<section>
-						<p>从 array 类型</p>
-						<table>
-							<caption>Customer</caption>
-							<tbody><tr>
-							<th>Customer ID</th>
-							<th>First Name</th>
-							<th>Surname</th>
-							<th>Telephone Number</th>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>Pooja</td>
-							<td>Singh</td>
-							<td>555-861-2025, 192-122-1111</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>San</td>
-							<td>Zhang</td>
-							<td>(555) 403-1659 Ext. 53; 182-929-2929</td>
-							</tr>
-							<tr>
-							<td>789</td>
-							<td>John</td>
-							<td>Doe</td>
-							<td>555-808-9633</td>
-							</tr>
-							</tbody>
-						</table>
-
-						<p>变成</p>
-
-						<table>
-							<caption>Customer</caption>
-							<tbody><tr>
-							<th>Customer ID</th>
-							<th>First Name</th>
-							<th>Surname</th>
-							<th>Telephone Number1</th>
-							<th>Telephone Number2</th>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>Pooja</td>
-							<td>Singh</td>
-							<td>555-861-2025</td>
-							<td>192-122-1111</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>San</td>
-							<td>Zhang</td>
-							<td>(555) 403-1659 Ext. 53</td>
-							<td>182-929-2929</td>
-							</tr>
-							<tr>
-							<td>789</td>
-							<td>John</td>
-							<td>Doe</td>
-							<td>555-808-9633</td>
-							<td></td>
-							</tr>
-							</tbody>
-						</table>
-					</section>
-
-					<section>
-						<p>或者一对多映射（不确定有几个值）</p>
-						<table>
-							<tbody><tr>
-							<td valign="top">
-							<table class="wikitable">
-							<caption>Customer Name</caption>
-							<tbody><tr>
-							<th><u>Customer ID</u></th>
-							<th>First Name</th>
-							<th>Surname</th>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>Pooja</td>
-							<td>Singh</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>San</td>
-							<td>Zhang</td>
-							</tr>
-							<tr>
-							<td>789</td>
-							<td>John</td>
-							<td>Doe</td>
-							</tr>
-							</tbody></table>
-							</td>
-							<td valign="top">
-							<table class="wikitable">
-							<caption>Customer Telephone Number</caption>
-							<tbody><tr>
-							<th>Customer ID</th>
-							<th><u>Telephone Number</u></th>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>555-861-2025</td>
-							</tr>
-							<tr>
-							<td>123</td>
-							<td>192-122-1111</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>(555) 403-1659 Ext. 53</td>
-							</tr>
-							<tr>
-							<td>456</td>
-							<td>182-929-2929</td>
-							</tr>
-							<tr>
-							<td>789</td>
-							<td>555-808-9633</td>
-							</tr>
-							</tbody></table>
-							</td>
-							</tr>
-							</tbody></table>
-					</section>
-
-					<section>
-						<h3>动机</h3>
-						<ul>
-							<li>简单类型比复杂类型更好处理（可以分开检查、去重、查询、索引、更新等）：准确性 ✅</li>
-							<li>可以方便合成和模拟复杂的值：灵活性 ✅
-								<dl>
-									<dt>Sarah Zhang</dt>
-									<dd><code>fname || ' ' || lname</code></dd>
-									<dt>Zhang, Sarah</dt>
-									<dd><code>lname || ', ' || fname</code></dd>
-									<dt>还原成数组</dt>
-									<dd><code>array_agg(phones)</code></dd>
-								</dl>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h3>3NF</h3>
-					</section>
-
-					<section>
-						<h3>BCNF</h3>
-					</section>
+				<section data-markdown="markdowns/normalization.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>
-					<section>foreign key 和关系建模</section>
-					<section>一对一关系</section>
-					<section>一对多关系</section>
-					<section>多对多关系</section>
-					<section>CTE 和递归查询</section>
+				<section data-markdown="markdowns/关系建模.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>合理利用 view 提高建模效率</section>
-
-				<section>
-					<section>primary key, unique key, serial, and index</section>
-					<section>
-						Instagram's sharding and ID generation:
-						https://engineering.instagram.com/sharding-ids-at-instagram-1cf5a71e5a5c
-					</section>
+				<section data-markdown="markdowns/合理利用 view 提高建模效率.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>
-					<section>PostgreSQL specific tricks</section>
-					<section>range type</section>
-					<section>tsrange</section>
-					<section>point, box and circle</section>
+				<section data-markdown="markdowns/Constraints, Checks, and Triggers.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>运维工具</section>
-
-				<section>
-					实战：modeling a workflow API
+				<section data-markdown="markdowns/PostgreSQL Specific Tricks.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
-				<section>
-					<section>
-						其他相关
-					</section>
-					<section>
-						cockroachdb and tidb
-					</section>
+				<section data-markdown="markdowns/实用工具.md"
+								 data-separator-vertical="^\n\n" >
 				</section>
-
+				<section data-markdown="markdowns/其他相关.md"
+								 data-separator-vertical="^\n\n" >
+				</section>
 			</div>
 		</div>
 
