@@ -3,7 +3,7 @@
 *像瑞士军刀一样多样和可靠*
 
 
-### [JSON Types](https://www.postgresql.org/docs/9.6/static/datatype-json.html)
+### [JSON Types](https://www.postgresql.org/docs/current/static/datatype-json.html)
 
 - 如果你非要打破第一范式的话
 - 基本可以当做 MongoDB 来用
@@ -11,7 +11,7 @@
 - 实践上，很多编程语言的 driver 支持有限，需要谨慎
 
 
-### [Range Type](https://www.postgresql.org/docs/9.6/static/rangetypes.html#RANGETYPES-BUILTIN)
+### [Range Type](https://www.postgresql.org/docs/current/static/rangetypes.html#RANGETYPES-BUILTIN)
 
 - 不用自己去检查 start <= end
 - 支持整数、numeric、时间等
@@ -20,7 +20,7 @@
 - 支持 index (GIST)
 
 
-### [Geometric Types](https://www.postgresql.org/docs/9.6/static/datatype-geometric.html)
+### [Geometric Types](https://www.postgresql.org/docs/current/static/datatype-geometric.html)
 
 - 点线面
 - 交叉、重合、切线（点）等操作
@@ -41,7 +41,8 @@
 
 - [inheritance](https://www.postgresql.org/docs/current/static/ddl-inherit.html) / [partition](https://www.postgresql.org/docs/current/static/ddl-partitioning.html)
 - Postgres 10 中有了 [native partition](https://wiki.postgresql.org/wiki/New_in_postgres_10#Native_Partitioning)
-- [window function](https://www.postgresql.org/docs/9.6/static/functions-window.html)
-- [cubing](https://www.postgresql.org/docs/9.6/static/cube.html)
-- [全文搜索](https://www.postgresql.org/docs/9.6/static/textsearch.html)
-- [确定精度计算](https://www.postgresql.org/docs/9.6/static/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL) 和 `money` 类型
+- [partial index](https://www.postgresql.org/docs/current/static/indexes-partial.html)
+- [window function](https://www.postgresql.org/docs/current/static/functions-window.html)
+- [cubing](https://www.postgresql.org/docs/current/static/cube.html)
+- [全文搜索](https://www.postgresql.org/docs/current/static/textsearch.html)
+- [确定精度计算](https://www.postgresql.org/docs/current/static/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL) 和 `money` 类型
