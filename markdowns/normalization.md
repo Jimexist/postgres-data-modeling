@@ -202,7 +202,7 @@
 </table>
 
 
-### 动机
+### 1NF 动机
 
 - 简单类型比复杂类型更好处理（可以分开检查、去重、查询、索引、更新等）：准确性 ✅
 - 可以方便合成和模拟复杂的值：灵活性 ✅
@@ -216,7 +216,133 @@
   </dl>
 
 
+### 函数依赖
+
+*极其简化版本*
+
+- 定义： *A → B*
+- 代表：如果列 A 的值相同，那么 B 的值也相同
+- 注意：
+  - 逆命题不成立，如果 B 值相同，那么 A 的值可能不同
+  - 否命题不成立，如果 A 的值不同，那么 B 的值可能相同
+  - 比如身份证号和姓名
+
+
 ### 3NF
+
+*"Nothing but the key"*
+
+
+从
+
+<table>
+  <caption>Tournament Winners</caption>
+  <tbody><tr>
+  <th><u>Tournament</u></th>
+  <th><u>Year</u></th>
+  <th>Winner</th>
+  <th>Winner Date of Birth</th>
+  </tr>
+  <tr>
+  <td>Indiana Invitational</td>
+  <td>1998</td>
+  <td>Al Fredrickson</td>
+  <td>21 July 1975</td>
+  </tr>
+  <tr>
+  <td>Cleveland Open</td>
+  <td>1999</td>
+  <td>Bob Albertson</td>
+  <td>28 September 1968</td>
+  </tr>
+  <tr>
+  <td>Des Moines Masters</td>
+  <td>1999</td>
+  <td>Al Fredrickson</td>
+  <td>21 July 1975</td>
+  </tr>
+  <tr>
+  <td>Indiana Invitational</td>
+  <td>1999</td>
+  <td>Chip Masterson</td>
+  <td>14 March 1977</td>
+  </tr>
+  </tbody>
+</table>
+
+变成
+
+<table>
+  <tbody>
+  <tr>
+  <td valign="top">
+  <table class="wikitable">
+  <caption>Tournament Winners</caption>
+  <tbody><tr>
+  <th><u>Tournament</u></th>
+  <th><u>Year</u></th>
+  <th>Winner</th>
+  </tr>
+  <tr>
+  <td>Indiana Invitational</td>
+  <td>1998</td>
+  <td>Al Fredrickson</td>
+  </tr>
+  <tr>
+  <td>Cleveland Open</td>
+  <td>1999</td>
+  <td>Bob Albertson</td>
+  </tr>
+  <tr>
+  <td>Des Moines Masters</td>
+  <td>1999</td>
+  <td>Al Fredrickson</td>
+  </tr>
+  <tr>
+  <td>Indiana Invitational</td>
+  <td>1999</td>
+  <td>Chip Masterson</td>
+  </tr>
+  </tbody></table>
+  </td>
+  <td valign="top">
+  <table class="wikitable">
+  <caption>Winner Dates of Birth</caption>
+  <tbody><tr>
+  <th><u>Winner</u></th>
+  <th>Date of Birth</th>
+  </tr>
+  <tr>
+  <td>Chip Masterson</td>
+  <td>14 March 1977</td>
+  </tr>
+  <tr>
+  <td>Al Fredrickson</td>
+  <td>21 July 1975</td>
+  </tr>
+  <tr>
+  <td>Bob Albertson</td>
+  <td>28 September 1968</td>
+  </tr>
+  </tbody></table>
+  </td>
+  </tr>
+  </tbody>
+</table>
+
+
+### 3NF 动机
+
+- 减少了数据的重复,数据更加一致（准确性 ✅）
+  - 设想你要去修改其中的一个人的生日
+  - 设想输入的时候其中一条名字输入错误
+- 业务逻辑更加围绕「实体」构建（灵活性 ✅）
+  - 业务概念重用（比赛 + 人）
+
 
 
 ### BCNF
+
+*Boyce–Codd normal form*
+
+比 3NF 略强，比 4NF 略弱，这里略过不讲。
